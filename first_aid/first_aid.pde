@@ -6,12 +6,19 @@ void setup() {
   // List all the available serial ports
   printArray(Serial.list());
   // Open the port you are using at the rate you want:
-  myPort = new Serial(this, Serial.list()[11], 9600);
+  myPort = new Serial(this, Serial.list()[11], 115200);
 }
 
 void draw() {
   while (myPort.available() > 0) {
-    String inLine = myPort.readString();
-    println(inLine);
+    int inInt = int(myPort.readString());
+    println(inInt);
+    
+    if (inInt > 900) {
+      background(255, 186, 240);
+    }
+    else {
+      background(0);
+    }
   }
 }

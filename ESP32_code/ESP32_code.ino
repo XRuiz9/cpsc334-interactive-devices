@@ -3,31 +3,33 @@
 */
 
 // ledPin refers to ESP32 GPIO 14
-const int button = 14;
+//const int button = 14;
+const int flip = 12;
 //const int joyy = 12;
 //const int joyx = 13;
   int analog_value = 0;
+  int analogs_value = 0;
 //int analogy_value = 0;
 //int analogx_value = 0;
 
 // the setup function runs once when you press reset or power the board
 void setup() {
   // initialize digital pin ledPin as an output.
-  Serial.begin(9600);
-  pinMode(button, OUTPUT);
+  Serial.begin(115200);
+//  pinMode(button, INPUT);
+  pinMode(flip, INPUT);
 //  pinMode(joyy, INPUT);
 //  pinMode(joyx, INPUT);
   delay(1000);
-  Serial.println("ESP32 Analog IN Test");
 }
 
 // the loop function runs over and over again forever
 void loop() {
 
   //Button
-  analog_value = analogRead(button);
-  Serial.println(analog_value);
-  delay(500);
+//  analog_value = analogRead(button);
+//  Serial.print(analog_value, DEC);
+//  delay(200);
 
   //Joystick
 //  analogy_value = analogRead(joyy);
@@ -37,6 +39,11 @@ void loop() {
 //  Serial.println(analogx_value);
 //  Serial.println("x:" + analogx_value);
 
-  delay(500);
+//  delay(100);
+
+   //Switch
+   analogs_value = analogRead(flip);
+   Serial.print(analogs_value, DEC);
+   delay(200);
   
 }
