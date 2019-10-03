@@ -1,6 +1,7 @@
 import processing.serial.*;
 
 int emote = 0;
+int emoteLimit = 0;
 boolean pressButton = false;
 boolean flipSwitch = false;
 boolean joyUp = false;
@@ -13,9 +14,11 @@ Serial myPort;  // The serial port
 
 void setup() {
   // List all the available serial ports
-  printArray(Serial.list());
+  //printArray(Serial.list());
   // Open the port you are using at the rate you want:
   myPort = new Serial(this, Serial.list()[11], 115200);
+  emote = 3;
+  emoteLimit = 3;
 }
 
 void beSad() {
@@ -71,67 +74,68 @@ void beHappy() {
 }
 
 void draw() {
-  if (emote == 3) {
-    beHappy();
-  }
-  
-  if (pressButton) {
-    if (input[0] > 2000) {
-      emote += 1;
-      pressButton = false;
-    }
-  }
-  
-  if (flipSwitch) {
-    if (input[1] > 3000) {
-      emote += 1;
-      flipSwitch = false;
-    }
-  }
-  
-  if (joyUp) {
-    if (input[2] < 500) {
-      emote += 1;
-      joyUp = false;
-    }
-  }
-  
-  if (joyDown) {
-    if (inpuy[2] > 3000) {
-      emote += 1;
-      joyDown = false;
-    }
-  }
-  
-  if (joyLeft) {
-    if (input[3] < 500) {
-      emote += 1;
-      joyLeft = false;
-    }
-  }
-  
-  if (joyRight) {
-    if (input[3] > 3000) {
-      emote += 1;
-      joyRight = false;
-    }
-  }
- 
-  //while (myPort.available() > 0) {
-  //  String inMsg = myPort.readString();
-  //  println(inMsg);
+  while (myPort.available() > 0) {
+    String inMsg = myPort.readString();
+    println(inMsg);
     
-  //  String[] input = split(inMsg, ", ");
+    String[] input = split(inMsg, ",");
+    //printArray(input);
+  
+    if (emote == emoteLimit) {
+      beHappy();
+      println(pressButton, flipSwitch, joyUp, joyDown, joyLeft, joyRight);
+      emoteLimit = int(pressButton) + int(flipSwitch) + int(joyUp) + int(joyDown) + int(joyLeft) + int(joyRight);
+    }
     
-  //  // YJoystick
-  //  if (input[2] > 1000) {
-  //  }
+    if (pressButton) {
+      if (int(input[0]) < 100) {
+        emote += 1;
+        pressButton = false;
+        println("Feeling better..");
+      }
+    }
     
-  //  // XJoystick
-  //  if (input[3] > 1000) {
-  //  }
+    if (flipSwitch) {
+      if (int(input[1]) > 3000) {
+        emote += 1;
+        flipSwitch = false;
+        println("Feeling better..");
+      }
+    }
     
+    if (joyUp) {
+      if (int(input[2]) < 500) {
+        emote += 1;
+        joyUp = false;
+        println("Feeling better..");
+      }
+    }
     
+    if (joyDown) {
+      if (int(input[2]) > 3000) {
+        emote += 1;
+        joyDown = false;
+        println("Feeling better..");
+      }
+    }
+    
+    if (joyLeft) {
+      if (int(input[3]) < 500) {
+        emote += 1;
+        joyLeft = false;
+        println("Feeling better..");
+      }
+    }
+    
+    if (joyRight) {
+      if (int(input[3]) > 3000) {
+        emote += 1;
+        joyRight = false;
+        println("Feeling better..");
+      }
+    }
+  }
+        
   //  //if (inInt > 900) {
   //  //  background(255, 186, 240);
   //  //}
