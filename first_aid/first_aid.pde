@@ -71,7 +71,7 @@ void beSad() {
 
 void beHappy() {
   image(face1, 0, 0);
-  println(face1);
+  //println(face1);
   println("Finally, I am happy!");
   delay(5000);
   beSad();
@@ -95,10 +95,12 @@ void displayFace() {
 void draw() {
   while (myPort.available() > 0) {
     String inMsg = myPort.readString();
-    println(inMsg);
-    displayFace();
+    //println(inMsg);
+    //displayFace();
     String[] input = split(inMsg, ",");
     //printArray(input);
+    
+    displayFace();
   
     if (emote == emoteLimit) {
       beHappy();
@@ -110,7 +112,7 @@ void draw() {
       if (int(input[0]) < 100) {
         emote += 1;
         pressButton = false;
-        println("Feeling better..");
+        println("Feeling better... button");
       }
     }
     
@@ -118,7 +120,7 @@ void draw() {
       if (int(input[1]) > 3000) {
         emote += 1;
         flipSwitch = false;
-        println("Feeling better..");
+        println("Feeling better... switch");
       }
     }
     
@@ -126,7 +128,7 @@ void draw() {
       if (int(input[2]) < 500) {
         emote += 1;
         joyUp = false;
-        println("Feeling better..");
+        println("Feeling better... jup");
       }
     }
     
@@ -134,7 +136,7 @@ void draw() {
       if (int(input[2]) > 3000) {
         emote += 1;
         joyDown = false;
-        println("Feeling better..");
+        println("Feeling better... jdown");
       }
     }
     
@@ -142,7 +144,7 @@ void draw() {
       if (int(input[3]) < 500) {
         emote += 1;
         joyLeft = false;
-        println("Feeling better..");
+        println("Feeling better... jleft");
       }
     }
     
@@ -150,16 +152,8 @@ void draw() {
       if (int(input[3]) > 3000) {
         emote += 1;
         joyRight = false;
-        println("Feeling better..");
+        println("Feeling better... jright");
       }
     }
   }
-        
-  //  //if (inInt > 900) {
-  //  //  background(255, 186, 240);
-  //  //}
-  //  //else {
-  //  //  background(0);
-  //  //}
-  //}
 }

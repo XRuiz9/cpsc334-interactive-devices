@@ -1,6 +1,6 @@
 //Setting Constants for GPIO Pins on ESP32
 const int button = 14;
-const int flip = 12;
+const int flip = 26;
 const int joyy = 32;
 const int joyx = 35;
 
@@ -37,8 +37,8 @@ void loop() {
   analogs_value = analogRead(flip);
 
   //Combining values and sending it out
-   msgOut = String(analog_value) + "," + String(analogs_value) + "," + String(analogy_value) + "," + String(analogx_value);
-   Serial.println(msgOut);
+   msgOut = String(analog_value) + "," + String(analogs_value) + "," + String(analogy_value) + "," + String(analogx_value) + ",";
+   Serial.print(msgOut);
 
    delay(200);
   
