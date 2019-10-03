@@ -1,14 +1,8 @@
 import processing.serial.*;
 
-int emote = 0;
-int emoteLimit = 0;
-boolean pressButton = false;
-boolean flipSwitch = false;
-boolean joyUp = false;
-boolean joyDown = false;
-boolean joyLeft = false;
-boolean joyRight = false;
-
+int emote, emoteLimit;
+boolean pressButton, flipSwitch, joyUp, joyDown, joyLeft, joyRight;
+PImage face1, face2, face3, face4;
 
 Serial myPort;  // The serial port
 
@@ -16,7 +10,15 @@ void setup() {
   // List all the available serial ports
   //printArray(Serial.list());
   // Open the port you are using at the rate you want:
+  size(800, 480);
+  
   myPort = new Serial(this, Serial.list()[11], 115200);
+  
+  face1 = loadImage("face1.png");
+  face2 = loadImage("face2.png");
+  face3 = loadImage("face3.png");
+  face4 = loadImage("face4.png");
+  
   emote = 3;
   emoteLimit = 3;
 }
@@ -68,16 +70,33 @@ void beSad() {
 }
 
 void beHappy() {
+  image(face1, 0, 0);
+  println(face1);
   println("Finally, I am happy!");
   delay(5000);
   beSad();
+}
+
+void displayFace() {
+  
+  if (emote == (emoteLimit - 1)) {
+    image(face2, 0, 0);
+  }
+  
+  if (emote == (emoteLimit - 2)) {
+    image(face3, 0, 0);
+  }
+  
+  if (emote == (emoteLimit - 3)) {
+    image(face4, 0, 0);
+  }
 }
 
 void draw() {
   while (myPort.available() > 0) {
     String inMsg = myPort.readString();
     println(inMsg);
-    
+    displayFace();
     String[] input = split(inMsg, ",");
     //printArray(input);
   
