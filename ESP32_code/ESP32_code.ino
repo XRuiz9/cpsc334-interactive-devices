@@ -14,6 +14,8 @@ int analogs_value = 0;
 int analogy_value = 0;
 int analogx_value = 0;
 
+//save
+
 //Output string that concatenates analog values
 String msgOut;
 
