@@ -26,7 +26,7 @@ void setup() {
 
 void beSad() {
   //Reset all values
-  isSad = false;
+  isSad = true;
   pressButton = false;
   flipSwitch = false;
   joyUp = false;
@@ -79,6 +79,7 @@ void beSad() {
 void displayFace() {
   if (emote == emoteLimit) {
     image(face1, 0, 0);
+    isSad = false;
   }
   
   if (emote == (emoteLimit - 1)) {
@@ -104,9 +105,8 @@ void draw() {
 
     displayFace();
     
-    if (!isSad) {
+    if (isSad) {
       tStart = millis();
-      isSad = true;
     }
   
     if (emote == emoteLimit) {
