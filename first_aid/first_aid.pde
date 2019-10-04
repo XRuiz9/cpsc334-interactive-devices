@@ -1,8 +1,15 @@
 import processing.serial.*;
+import processing.sound.*;
+import ddf.minim.*;
+
+Minim minim;
+AudioPlayer sound;
 
 int emote, emoteLimit, tStart, tStop;
 boolean isSad, pressButton, flipSwitch, joyUp, joyDown, joyLeft, joyRight;
 PImage face1, face2, face3, face4;
+
+SoundFile file;
 
 Serial myPort;  // The serial port
 
@@ -19,6 +26,9 @@ void setup() {
   face3 = loadImage("face3.png");
   face4 = loadImage("face4.png");
   
+  minim = new Minim(this);
+  sound = minim.loadFile("audio.wav");
+  sound.play();
   emote = 3;
   emoteLimit = 3;
   //tStart = millis();
@@ -96,6 +106,7 @@ void displayFace() {
 }
 
 void draw() {
+
   while (myPort.available() > 0) {
     String inMsg = myPort.readString();
     //println(inMsg);
