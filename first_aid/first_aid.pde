@@ -1,48 +1,48 @@
 import processing.serial.*;
-import processing.sound.*;
 import ddf.minim.*;
 
+//Handle Audio Sources
 Minim minim;
-AudioPlayer allBetter, sadAgain, better1, better2, better3;
+AudioPlayer allBetter, sadAgain, better1, better2;
 
 int emote, emoteLimit, tStart, tStop;
-boolean isSad, pressButton, flipSwitch, joyUp, joyDown, joyLeft, joyRight;
+boolean isSad, pressButton, switchOn, switchOff, joyUp, joyDown, joyLeft, joyRight;
 PImage face1, face2, face3, face4;
 
-SoundFile file;
-
-Serial myPort;  // The serial port
+//Establish Serial Port
+Serial myPort;
 
 void setup() {
-  // List all the available serial ports
-  //printArray(Serial.list());
-  // Open the port you are using at the rate you want:
   size(800, 480);
   
   myPort = new Serial(this, Serial.list()[11], 115200);
   
+  //Load faces
   face1 = loadImage("face1.png");
   face2 = loadImage("face2.png");
   face3 = loadImage("face3.png");
   face4 = loadImage("face4.png");
   
+  //Load sounds
   minim = new Minim(this);
   allBetter = minim.loadFile("AllBetter.wav");
   sadAgain = minim.loadFile("SadAgain.wav");
   better1 = minim.loadFile("Better1.wav");
   better2 = minim.loadFile("Better2.wav");
-  better3 = minim.loadFile("Better3.wav");
   
+  //Set Start Emotion
   emote = 3;
   emoteLimit = 3;
-  //tStart = millis();
 }
 
+//Function to randomize expected input
 void beSad() {
+  
   //Reset all values
   isSad = true;
   pressButton = false;
-  flipSwitch = false;
+  switchOn = false;
+  switchOff = false;
   joyUp = false;
   joyDown = false;
   joyLeft = false;
@@ -63,7 +63,9 @@ void beSad() {
   
   //Setting switch input
   if (flip >= 0.5) {
-    flipSwitch = true;
+    switchOn = true;
+  } else {
+    switchOff = true;
   }
   
   //Setting joystick axis
@@ -82,14 +84,9 @@ void beSad() {
       joyLeft = true;
     }
   }
-  println("I'm sad again.");
 }
 
-//void beHappy() {
-
-//  //println("Finally, I am happy!");
-//}
-
+//Display proper face image depending on emote level
 void displayFace() {
   if (emote == emoteLimit) {
     image(face1, 0, 0);
@@ -109,23 +106,19 @@ void displayFace() {
   }
 }
 
+//Play proper sound depending on emote level
 void playSound() {
   if (emote == emoteLimit) {
     allBetter.play();
-    better3.rewind();
-  }
-  
-  if (emote == (emoteLimit - 1)) {
-    better3.play();
     better2.rewind();
   }
   
-  if (emote == (emoteLimit - 2)) {
+  if (emote == (emoteLimit - 1)) {
     better2.play();
     better1.rewind();
   }
   
-  if (emote == (emoteLimit - 3)) {
+  if (emote == (emoteLimit - 2)) {
     better1.play();
   }
 }
@@ -133,23 +126,24 @@ void playSound() {
 void draw() {
 
   while (myPort.available() > 0) {
-    String inMsg = myPort.readString();
-    //println(inMsg);
-
-    String[] input = split(inMsg, ",");
-    //printArray(input);
-
     displayFace();
     
+    String inMsg = myPort.readString();
+    String[] input = split(inMsg, ",");
+    
+    //Updates timer as long until is not sad
     if (isSad) {
       tStart = millis();
     }
   
+    //Sets random timer to be sad again
     if (emote == emoteLimit) {
-      if (millis() - tStart > 5000) {
+      if (millis() - tStart > random(5000, 10000)) {
         beSad();
-        println(pressButton, flipSwitch, joyUp, joyDown, joyLeft, joyRight);
-        emoteLimit = int(pressButton) + int(flipSwitch) + int(joyUp) + int(joyDown) + int(joyLeft) + int(joyRight);
+        println(pressButton, switchOn, switchOff, joyUp, joyDown, joyLeft, joyRight);
+        emoteLimit = int(pressButton) + int(switchOn) + int(switchOff) + int(joyUp) + int(joyDown) + int(joyLeft) + int(joyRight);
+        
+        //Reset sounds
         allBetter.rewind();
         sadAgain.play();
         sadAgain.rewind();
@@ -165,12 +159,21 @@ void draw() {
       }
     }
     
-    if (flipSwitch) {
+    if (switchOn) {
       if (int(input[1]) > 3000) {
         emote += 1;
-        flipSwitch = false;
+        switchOn = false;
         playSound();
-        println("Feeling better... switch");
+        println("Feeling better... switchon");
+      }
+    }
+    
+    if (switchOff) {
+      if (int(input[1]) < 3000) {
+        emote += 1;
+        switchOff = false;
+        playSound();
+        println("Feeling better... switchoff");
       }
     }
     
