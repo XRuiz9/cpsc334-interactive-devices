@@ -3,7 +3,7 @@ import processing.sound.*;
 import ddf.minim.*;
 
 Minim minim;
-AudioPlayer sound;
+AudioPlayer allBetter, sadAgain, better1, better2, better3;
 
 int emote, emoteLimit, tStart, tStop;
 boolean isSad, pressButton, flipSwitch, joyUp, joyDown, joyLeft, joyRight;
@@ -27,8 +27,12 @@ void setup() {
   face4 = loadImage("face4.png");
   
   minim = new Minim(this);
-  sound = minim.loadFile("audio.wav");
-  sound.play();
+  allBetter = minim.loadFile("AllBetter.wav");
+  sadAgain = minim.loadFile("SadAgain.wav");
+  better1 = minim.loadFile("Better1.wav");
+  better2 = minim.loadFile("Better2.wav");
+  better3 = minim.loadFile("Better3.wav");
+  
   emote = 3;
   emoteLimit = 3;
   //tStart = millis();
@@ -105,6 +109,27 @@ void displayFace() {
   }
 }
 
+void playSound() {
+  if (emote == emoteLimit) {
+    allBetter.play();
+    better3.rewind();
+  }
+  
+  if (emote == (emoteLimit - 1)) {
+    better3.play();
+    better2.rewind();
+  }
+  
+  if (emote == (emoteLimit - 2)) {
+    better2.play();
+    better1.rewind();
+  }
+  
+  if (emote == (emoteLimit - 3)) {
+    better1.play();
+  }
+}
+
 void draw() {
 
   while (myPort.available() > 0) {
@@ -125,6 +150,9 @@ void draw() {
         beSad();
         println(pressButton, flipSwitch, joyUp, joyDown, joyLeft, joyRight);
         emoteLimit = int(pressButton) + int(flipSwitch) + int(joyUp) + int(joyDown) + int(joyLeft) + int(joyRight);
+        allBetter.rewind();
+        sadAgain.play();
+        sadAgain.rewind();
       }
     }
     
@@ -132,6 +160,7 @@ void draw() {
       if (int(input[0]) < 100) {
         emote += 1;
         pressButton = false;
+        playSound();
         println("Feeling better... button");
       }
     }
@@ -140,6 +169,7 @@ void draw() {
       if (int(input[1]) > 3000) {
         emote += 1;
         flipSwitch = false;
+        playSound();
         println("Feeling better... switch");
       }
     }
@@ -148,6 +178,7 @@ void draw() {
       if (int(input[2]) < 500) {
         emote += 1;
         joyUp = false;
+        playSound();
         println("Feeling better... jup");
       }
     }
@@ -156,6 +187,7 @@ void draw() {
       if (int(input[2]) > 3000) {
         emote += 1;
         joyDown = false;
+        playSound();
         println("Feeling better... jdown");
       }
     }
@@ -164,6 +196,7 @@ void draw() {
       if (int(input[3]) < 500) {
         emote += 1;
         joyLeft = false;
+        playSound();
         println("Feeling better... jleft");
       }
     }
@@ -172,6 +205,7 @@ void draw() {
       if (int(input[3]) > 3000) {
         emote += 1;
         joyRight = false;
+        playSound();
         println("Feeling better... jright");
       }
     }
