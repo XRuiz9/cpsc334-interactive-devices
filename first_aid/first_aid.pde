@@ -1,7 +1,7 @@
 import processing.serial.*;
 
-int emote, emoteLimit;
-boolean pressButton, flipSwitch, joyUp, joyDown, joyLeft, joyRight;
+int emote, emoteLimit, tStart, tStop;
+boolean isSad, pressButton, flipSwitch, joyUp, joyDown, joyLeft, joyRight;
 PImage face1, face2, face3, face4;
 
 Serial myPort;  // The serial port
@@ -21,10 +21,12 @@ void setup() {
   
   emote = 3;
   emoteLimit = 3;
+  //tStart = millis();
 }
 
 void beSad() {
   //Reset all values
+  isSad = false;
   pressButton = false;
   flipSwitch = false;
   joyUp = false;
@@ -69,15 +71,15 @@ void beSad() {
   println("I'm sad again.");
 }
 
-void beHappy() {
-  image(face1, 0, 0);
-  //println(face1);
-  println("Finally, I am happy!");
-  delay(5000);
-  beSad();
-}
+//void beHappy() {
+
+//  //println("Finally, I am happy!");
+//}
 
 void displayFace() {
+  if (emote == emoteLimit) {
+    image(face1, 0, 0);
+  }
   
   if (emote == (emoteLimit - 1)) {
     image(face2, 0, 0);
@@ -96,16 +98,23 @@ void draw() {
   while (myPort.available() > 0) {
     String inMsg = myPort.readString();
     //println(inMsg);
-    //displayFace();
+
     String[] input = split(inMsg, ",");
     //printArray(input);
-    
+
     displayFace();
+    
+    if (!isSad) {
+      tStart = millis();
+      isSad = true;
+    }
   
     if (emote == emoteLimit) {
-      beHappy();
-      println(pressButton, flipSwitch, joyUp, joyDown, joyLeft, joyRight);
-      emoteLimit = int(pressButton) + int(flipSwitch) + int(joyUp) + int(joyDown) + int(joyLeft) + int(joyRight);
+      if (millis() - tStart > 5000) {
+        beSad();
+        println(pressButton, flipSwitch, joyUp, joyDown, joyLeft, joyRight);
+        emoteLimit = int(pressButton) + int(flipSwitch) + int(joyUp) + int(joyDown) + int(joyLeft) + int(joyRight);
+      }
     }
     
     if (pressButton) {
