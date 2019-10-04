@@ -1,11 +1,15 @@
 import processing.serial.*;
 import ddf.minim.*;
+import ddf.minim.ugens.*;
 
 //Handle Audio Sources
 Minim minim;
-AudioPlayer allBetter, sadAgain, better1, better2;
+//AudioPlayer allBetter, sadAgain, better1, better2;
+AudioOutput out;
+Sampler allBetterS, sadAgainS, better1S, better2S;
 
-int emote, emoteLimit, tStart, tStop;
+
+int emote, emoteLimit, tStart;
 boolean isSad, pressButton, switchOn, switchOff, joyUp, joyDown, joyLeft, joyRight;
 PImage face1, face2, face3, face4;
 
@@ -15,7 +19,7 @@ Serial myPort;
 void setup() {
   size(800, 480);
   
-  myPort = new Serial(this, Serial.list()[11], 115200);
+  myPort = new Serial(this, Serial.list()[4], 115200);
   
   //Load faces
   face1 = loadImage("face1.png");
@@ -25,10 +29,21 @@ void setup() {
   
   //Load sounds
   minim = new Minim(this);
-  allBetter = minim.loadFile("AllBetter.wav");
-  sadAgain = minim.loadFile("SadAgain.wav");
-  better1 = minim.loadFile("Better1.wav");
-  better2 = minim.loadFile("Better2.wav");
+  out = minim.getLineOut();
+  //allBetter = minim.loadFile("AllBetter.wav");
+  //sadAgain = minim.loadFile("SadAgain.wav");
+  //better1 = minim.loadFile("Better1.wav");
+  //better2 = minim.loadFile("Better2.wav");
+  
+  //Load samplers
+  allBetterS = new Sampler("AllBetter.wav", 4, minim);
+  allBetterS.patch(out);
+  sadAgainS = new Sampler("SadAgain.wav", 4, minim);
+  sadAgainS.patch(out);
+  better1S = new Sampler("Better1.wav", 4, minim);
+  better1S.patch(out);
+  better2S = new Sampler("Better2.wav", 4, minim);
+  better2S.patch(out);
   
   //Set Start Emotion
   emote = 3;
@@ -109,17 +124,29 @@ void displayFace() {
 //Play proper sound depending on emote level
 void playSound() {
   if (emote == emoteLimit) {
-    allBetter.play();
-    better2.rewind();
+    allBetterS.trigger();
+    
+    //allBetterS.stop();
+    //allBetterS.unpatch(out);
+    //allBetter.play();
+    //better2.rewind();
   }
   
   if (emote == (emoteLimit - 1)) {
-    better2.play();
-    better1.rewind();
+    better2S.trigger();
+
+//    better2S.stop();
+//    better2S.unpatch(out);
+    //better2.play();
+    //better1.rewind();
   }
   
   if (emote == (emoteLimit - 2)) {
-    better1.play();
+    better1S.trigger();
+
+    //better1S.stop();
+    //better1S.unpatch(out);
+    //better1.play();
   }
 }
 
@@ -144,9 +171,13 @@ void draw() {
         emoteLimit = int(pressButton) + int(switchOn) + int(switchOff) + int(joyUp) + int(joyDown) + int(joyLeft) + int(joyRight);
         
         //Reset sounds
-        allBetter.rewind();
-        sadAgain.play();
-        sadAgain.rewind();
+        sadAgainS.trigger();
+
+        //sadAgainS.stop();
+        //sadAgainS.unpatch(out);
+        //allBetter.rewind();
+        //sadAgain.play();
+        //sadAgain.rewind();
       }
     }
     
