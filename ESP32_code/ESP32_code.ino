@@ -40,6 +40,7 @@ void loop() {
    msgOut = String(analog_value) + "," + String(analogs_value) + "," + String(analogy_value) + "," + String(analogx_value) + ",";
    Serial.print(msgOut);
 
+  //Sends values every 0.2 seconds.
    delay(200);
   
 }

@@ -4,7 +4,6 @@ import ddf.minim.ugens.*;
 
 //Handle Audio Sources
 Minim minim;
-//AudioPlayer allBetter, sadAgain, better1, better2;
 AudioOutput out;
 Sampler allBetterS, sadAgainS, better1S, better2S;
 
@@ -19,7 +18,7 @@ Serial myPort;
 void setup() {
   size(800, 480);
   
-  myPort = new Serial(this, Serial.list()[4], 115200);
+  myPort = new Serial(this, Serial.list()[11], 115200);
   
   //Load faces
   face1 = loadImage("face1.png");
@@ -30,12 +29,6 @@ void setup() {
   //Load sounds
   minim = new Minim(this);
   out = minim.getLineOut();
-  //allBetter = minim.loadFile("AllBetter.wav");
-  //sadAgain = minim.loadFile("SadAgain.wav");
-  //better1 = minim.loadFile("Better1.wav");
-  //better2 = minim.loadFile("Better2.wav");
-  
-  //Load samplers
   allBetterS = new Sampler("AllBetter.wav", 4, minim);
   allBetterS.patch(out);
   sadAgainS = new Sampler("SadAgain.wav", 4, minim);
@@ -125,28 +118,14 @@ void displayFace() {
 void playSound() {
   if (emote == emoteLimit) {
     allBetterS.trigger();
-    
-    //allBetterS.stop();
-    //allBetterS.unpatch(out);
-    //allBetter.play();
-    //better2.rewind();
   }
   
   if (emote == (emoteLimit - 1)) {
     better2S.trigger();
-
-//    better2S.stop();
-//    better2S.unpatch(out);
-    //better2.play();
-    //better1.rewind();
   }
   
   if (emote == (emoteLimit - 2)) {
     better1S.trigger();
-
-    //better1S.stop();
-    //better1S.unpatch(out);
-    //better1.play();
   }
 }
 
@@ -167,19 +146,17 @@ void draw() {
     if (emote == emoteLimit) {
       if (millis() - tStart > random(5000, 10000)) {
         beSad();
+        
+        //Useful message for debugging
         println(pressButton, switchOn, switchOff, joyUp, joyDown, joyLeft, joyRight);
+        
         emoteLimit = int(pressButton) + int(switchOn) + int(switchOff) + int(joyUp) + int(joyDown) + int(joyLeft) + int(joyRight);
         
-        //Reset sounds
         sadAgainS.trigger();
-
-        //sadAgainS.stop();
-        //sadAgainS.unpatch(out);
-        //allBetter.rewind();
-        //sadAgain.play();
-        //sadAgain.rewind();
       }
     }
+    
+    //Println messages are for making sure input is being properly received
     
     if (pressButton) {
       if (int(input[0]) < 100) {
