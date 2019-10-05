@@ -2,7 +2,7 @@
 
 I made this interactive device for module 2 of the Creative Embedded Systems class of Fall 2019. This piece is called First Aid and is about how taking care of oneself is a cyclical process. It's not always clear what you need to do feel better, and you never know how long it'll be until your not feeling so great. Howvever, with practice you can get better at taking care of yourself, or at the very least this cardboard baby!
 
-![First Aid Enclosures](https://github.com/XRuiz9/cpsc334-interactive-devices/blob/master/IMG_6787.JPG)
+![First Aid Enclosures](https://github.com/XRuiz9/cpsc334-interactive-devices/blob/master/promo.png)
 
 ## Install It Yourself!
 
